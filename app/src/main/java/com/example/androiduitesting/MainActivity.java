@@ -2,8 +2,10 @@ package com.example.androiduitesting;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String cityName = newName.getText().toString();
-                cityAdapter.add(cityName);
+                cityAdapter.add(cityName);  // Note: just the name, not object
                 newName.getText().clear();
                 nameField.setVisibility(View.INVISIBLE);
             }
@@ -62,6 +64,18 @@ public class MainActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 cityAdapter.clear();
+            }
+        });
+
+        // Set listener for navigating to  ShowActivity
+        cityList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(view.getContext(), ShowActivity.class);
+                intent.putExtra("CITY_NAME", dataList.get(i));
+
+                startActivity(intent);
+                cityList.setItemChecked(i, false);  // Unset selection
             }
         });
     }
